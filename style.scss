@@ -1,0 +1,245 @@
+$primary:#00588F;
+
+// @import "node_modules/bootstrap/scss/mixins/banner";
+// @include bsBanner("");
+
+
+// scss-docs-start import-stack
+// Configuration
+@import "node_modules/bootstrap/scss/functions";
+@import "node_modules/bootstrap/scss/variables";
+@import "node_modules/bootstrap/scss/maps";
+@import "node_modules/bootstrap/scss/mixins";
+@import "node_modules/bootstrap/scss/utilities";
+
+// Layout & components
+@import "node_modules/bootstrap/scss/root";
+@import "node_modules/bootstrap/scss/reboot";
+@import "node_modules/bootstrap/scss/type";
+@import "node_modules/bootstrap/scss/images";
+@import "node_modules/bootstrap/scss/containers";
+@import "node_modules/bootstrap/scss/grid";
+@import "node_modules/bootstrap/scss/tables";
+@import "node_modules/bootstrap/scss/forms";
+@import "node_modules/bootstrap/scss/buttons";
+@import "node_modules/bootstrap/scss/transitions";
+@import "node_modules/bootstrap/scss/dropdown";
+@import "node_modules/bootstrap/scss/button-group";
+@import "node_modules/bootstrap/scss/nav";
+@import "node_modules/bootstrap/scss/navbar";
+@import "node_modules/bootstrap/scss/card";
+// @import "node_modules/bootstrap/scss/accordion";
+@import "node_modules/bootstrap/scss/breadcrumb";
+// @import "node_modules/bootstrap/scss/pagination";
+// @import "node_modules/bootstrap/scss/badge";
+@import "node_modules/bootstrap/scss/alert";
+@import "node_modules/bootstrap/scss/progress";
+@import "node_modules/bootstrap/scss/list-group";
+// @import "node_modules/bootstrap/scss/close";
+// @import "node_modules/bootstrap/scss/toasts";
+// @import "node_modules/bootstrap/scss/modal";
+// @import "node_modules/bootstrap/scss/tooltip";
+// @import "node_modules/bootstrap/scss/popover";
+// @import "node_modules/bootstrap/scss/carousel";
+// @import "node_modules/bootstrap/scss/spinners";
+// @import "node_modules/bootstrap/scss/offcanvas";
+// @import "node_modules/bootstrap/scss/placeholders";
+
+// Helpers
+@import "node_modules/bootstrap/scss/helpers";
+
+// Utilities
+@import "node_modules/bootstrap/scss/utilities/api";
+// scss-docs-end import-stack
+
+
+
+body {
+    font-family: 'Microsoft JhengHei', Arial, sans-serif;
+    background: url(bg.png) center bottom;
+    background-size: cover;
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.screen {
+    padding-top: 40px;
+    padding-bottom: 100px;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-lg {
+    max-width: 200px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.logo-sm {
+    max-width: 120px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.countdown-container {
+    position: relative;
+}
+
+.countdown-value {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.wheel-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#wheelCanvas {
+    max-width: 100%;
+    height: auto;
+}
+
+.spin-btn {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: transparent;
+    border: 0;
+    color: #fff;
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.stars {
+    font-size: 2em;
+    text-shadow: 1px 1px 6px #ffffff;
+    color: #ffac10;
+    letter-spacing: 5px;
+}
+
+.edu-content {
+    background-color: rgba(255, 255, 255, 0.28);
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.quiz-question {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.28);
+    border-radius: 10px;
+}
+
+.wrong-answer {
+    background-color: rgba(255, 163, 163, 0.21);
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.spinning {
+    animation: spin 3s cubic-bezier(0.1, 0.7, 0.1, 1) forwards;
+}
+
+.font-size-xs {
+    font-size: 12px !important;
+}
+
+.font-size-sm {
+    font-size: 14px !important;
+}
+
+.font-size-md {
+    font-size: 16px !important;
+}
+
+.font-size-lg {
+    font-size: 18px !important;
+}
+
+.font-size-xl {
+    font-size: 20px !important;
+}
+
+.font-size-xxl {
+    font-size: 22px !important;
+}
+
+#readAloudButton.active {
+    background-color: #ffc107;
+    color: #fff;
+    border-color: #ffc107;
+}
+
+#screen6 {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    h2 {
+        font-size: 2rem;
+    }
+
+    p {
+        font-size: 1.2rem;
+    }
+}
+
+
+.form-check {
+    margin-bottom: 1rem;
+    padding: 0.325em 0.5em;
+    background: radial-gradient(ellipse at center, #ffffff 0%, #ededed 100%);
+    border-radius: 0.6em;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+
+    .form-check-input {
+        float: none;
+        margin-left: 0;
+        margin-right: 0.25em;
+
+        &[type=radio] {
+            border-radius: 0.325rem;
+            width: 1.25em;
+            height: 1.25em;
+            vertical-align: text-bottom;
+        }
+    }
+}
+
+.progress-danger {
+    background-color: #FFB7B7;
+}
+
+.progress-warning {
+    background-color: #f3bb44;
+}
+
+.progress-success {
+    background-color: #00AC76;
+}

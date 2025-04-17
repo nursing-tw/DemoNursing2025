@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>倒數計時轉盤隨機問卷系統</title>
+    <link href="style.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="container font-size-md position-sticky top-0">
+        <div class="bg-white p-3 shadow-sm">
+            <!-- 重置按鈕 -->
+            <div class="d-flex mb-2">
+                <img src="logo.png" alt="Logo" class="logo-sm">
+                <button id="resetButton" class="border-0 btn btn-outline-danger btn-sm me-1 me-3 ms-auto">
+                    <i class="fas fa-trash-alt"></i> 重置數據
+                </button>
+                <button id="fontDecreaseButton" class="btn btn-sm btn-outline-secondary me-1" title="字體縮小">
+                    <i class="fas fa-font"></i><i class="fas fa-minus"></i>
+                </button>
+                <button id="fontIncreaseButton" class="btn btn-sm btn-outline-secondary me-1" title="字體放大">
+                    <i class="fas fa-font"></i><i class="fas fa-plus"></i>
+                </button>
+                <button id="readAloudButton" class="btn btn-sm btn-outline-secondary" title="朗讀">
+                    <i class="fas fa-volume-up"></i>
+                </button>
+                
+            </div>
+            <div class="countdown-container">
+                <div class="time-info">
+                    <div class="d-flex align-items-center">
+                        <p id="startTime" class="fw-bold mb-0" aria-label="開始時間">--:--</p>
+                        <svg class="flex-grow-1" width="100%" height="15" viewBox="0 0 222 15" fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1 6.50001C0.447715 6.50001 -4.82823e-08 6.94772 0 7.50001C4.82823e-08 8.05229 0.447715 8.50001 1 8.50001L1 6.50001ZM221.707 8.2071C222.098 7.81657 222.098 7.18341 221.707 6.79288L215.343 0.428921C214.953 0.0383967 214.319 0.0383968 213.929 0.428921C213.538 0.819446 213.538 1.45261 213.929 1.84313L219.586 7.49999L213.929 13.1568C213.538 13.5474 213.538 14.1805 213.929 14.5711C214.319 14.9616 214.953 14.9616 215.343 14.5711L221.707 8.2071ZM1 8.50001L221 8.49999L221 6.49999L1 6.50001L1 8.50001Z"
+                                  fill="#929292" />
+                        </svg>
+                        <p id="endTime" class="fw-bold mb-0" aria-label="結束時間">--:--</p>
+                    </div>
+                    <div id="countdownValue" class="end-0 fw-bold mb-0 position-absolute pt-2 small start-0 text-center">00:00:00</div>
+                    <div class="d-flex align-items-center">
+                        <img src="fasting 1.png" alt="">
+                        <div class="progress flex-grow-1 mx-3">
+                            <div id="countdownProgress" class="progress-bar" role="progressbar"></div>
+                        </div>
+                        <img src="lamb 1.png" alt="">
+                    </div>
+                    <p class="mb-0 text-center">禁食時間，試試看能得到幾顆星</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 第一畫面：表單內容 -->
+    <div id="screen1" class="screen container">
+        <div class="mb-3 pt-5 text-center">
+            <img src="logo.png" alt="Logo" class="logo-lg">
+        </div>
+        <form id="setupForm" class="mb-4">
+            <div class="mb-3">
+                <select class="form-select" id="unit" required aria-label="單位">
+                    <option value="" selected disabled>請選擇單位</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <select class="form-select" id="eduContent" required aria-label="衛教內容">
+                    <option value="" selected disabled>請先選擇單位</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <input type="time" class="form-control" id="startTimeInput" required aria-label="時間設定">
+            </div>
+            <div class="mb-4" id="timeOptionContainer" aria-label="倒數選項">
+            </div>
+            <button type="submit" class="btn btn-primary w-100 rounded-4 btn-lg">設定</button>
+        </form>
+    </div>
+
+    <!-- 第二畫面：倒數狀態和轉盤 -->
+    <div id="screen2" class="screen container d-none">
+
+        <div class="wheel-container mb-4 position-relative">
+            <canvas id="wheelCanvas" width="300" height="300"></canvas>
+            <button id="spinButton" class="spin-btn">GO</button>
+        </div>
+        <div class="achievement-area text-center">
+            <div id="stars" class="stars">
+                <!-- 星星將在這裡動態添加 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 第三畫面：衛教內容 -->
+    <div id="screen3" class="screen container d-none">
+        <div class="edu-content">
+            <h2 id="eduTitle" class="mb-3">衛教標題</h2>
+            <div id="eduContentText" class="mb-4">
+                <!-- 衛教內容將在這裡動態添加 -->
+            </div>
+            <button id="finishReading" class="btn btn-primary w-100 rounded-4 btn-lg">看完了</button>
+        </div>
+    </div>
+
+    <!-- 第四畫面：問答頁面 -->
+    <div id="screen4" class="screen container d-none">
+        <div id="quizContainer">
+            <!-- 問題將在這裡動態添加 -->
+        </div>
+        <button id="submitQuiz" class="btn btn-primary w-100 mt-3 rounded-4 btn-lg">作答完畢</button>
+    </div>
+
+    <!-- 第五畫面：結果頁面 -->
+    <div id="screen5" class="screen container d-none">
+        <div id="quizResult" class="mb-4">
+            <!-- 結果將在這裡動態添加 -->
+        </div>
+        <div id="wrongAnswers" class="mb-4 d-none">
+            <h3>錯誤題目：</h3>
+            <div id="wrongAnswersList">
+                <!-- 錯誤題目將在這裡動態添加 -->
+            </div>
+            <button id="retryQuiz" class="btn btn-primary w-100 mt-3 rounded-4 btn-lg">再試試看</button>
+        </div>
+        <div id="successResult" class="text-center mb-4 d-none">
+            <h3 class="text-success">恭喜您完全了解！</h3>
+            <div class="mt-3">
+                <i class="fas fa-check-circle text-success fs-1"></i>
+            </div>
+        </div>
+    </div>
+    <!-- 第六畫面：倒數結束提示 -->
+    <div id="screen6" class="screen container d-none">
+        <div class="text-center">
+            <strong class="d-block fs-1 text-danger fw-bold ">倒數已結束！</strong>
+            <p class="mt-3">請依照指示進行下一步動作，或重新設定。</p>
+            <button id="restartButton" class="btn btn-primary mt-4">重新設定</button>
+        </div>
+    </div>
+
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- 資料檔案 -->
+    <script src="data.js"></script>
+    <!-- 主要 JavaScript -->
+    <script src="script.js"></script>
+</body>
+
+</html>
