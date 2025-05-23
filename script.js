@@ -345,6 +345,8 @@ function saveToLocalStorage() {
 function loadFromLocalStorage() {
     try {
         const savedData = localStorage.getItem(STORAGE_KEY);
+        const stickyHeader = document.querySelector('.position-sticky'); // 新增此行
+
         if (savedData) {
             const data = JSON.parse(savedData);
 
@@ -386,12 +388,14 @@ function loadFromLocalStorage() {
                             eduSelect.value = data.formSettings.selectedEduContent;
                         }
                         showScreen(2);
+                        stickyHeader.classList.remove('d-none');
                         return; // 還原到倒數畫面後結束
                     }
                 } else {
                     // 倒數時間已過，直接顯示倒數結束畫面
                     remainingSeconds = 0;
                     showScreen(6);
+                    stickyHeader.classList.remove('d-none');
                 }
             }
 
@@ -414,6 +418,7 @@ function loadFromLocalStorage() {
             if (data.currentScreen === 3 && data.selectedEduContent) {
                 selectedEduContent = data.selectedEduContent;
                 displayEducationalContent(selectedEduContent);
+                stickyHeader.classList.remove('d-none');
             }
 
             // 還原作答畫面：如果當前畫面是作答畫面（例如 screen4），且存有 selectedEduContentId
@@ -423,6 +428,7 @@ function loadFromLocalStorage() {
                     // 顯示作答畫面，並重新產生測驗問題
                     displayEducationalContent(selectedEduContent);
                 }
+                stickyHeader.classList.remove('d-none');
             }
 
             // 還原當前畫面（如果有保存）
@@ -433,6 +439,10 @@ function loadFromLocalStorage() {
                 } else {
                     showScreen(data.currentScreen);
                 }
+                stickyHeader.classList.remove('d-none');
+            } else {
+                // 如果沒有任何資料，確保上方區塊隱藏
+                stickyHeader.classList.add('d-none'); // 新增此行
             }
             console.log('數據已從 localStorage 載入');
         }
