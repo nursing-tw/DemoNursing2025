@@ -943,7 +943,6 @@ function showScreen(screenNumber) {
 
 function clearLocalStorage() {
     try {
-        // 重置單位與衛教內容下拉選單
         const unitSelect = document.getElementById('unit');
         unitSelect.selectedIndex = 0;
         const eduContentSelect = document.getElementById('eduContent');
@@ -951,28 +950,45 @@ function clearLocalStorage() {
 
         localStorage.removeItem(STORAGE_KEY);
 
-        // 重置全域變數
+        // 重置全域變數為初始狀態
         achievedStars = 0;
         completedEduContents = [];
+        
+        // 清除倒數計時器
+        if (countdownInterval) clearInterval(countdownInterval);
+        countdownInterval = null;
 
-        // 清除倒數計時
-        if (countdownInterval) {
-            clearInterval(countdownInterval);
-            countdownInterval = null;
-        }
+        // ⚠️ 重要！清除所有倒數相關變數
+        totalSeconds = 0;
+        remainingSeconds = 0;
+        startTimeValue = null;
+        endTimeValue = null;
 
-        // 重設表單欄位：我們希望 startTimeInput 顯示當下時間
-        setCurrentTime();  // 呼叫設定目前時間的函式
+        // 重置表單的時間為當前時間
+        setCurrentTime();
 
+        // 重設畫面上的倒數顯示
+        document.getElementById('countdownValue').textContent = '';
+        document.getElementById('startTime').textContent = '--:--';
+        document.getElementById('endTime').textContent = '--:--';
+        
+        // 進度條恢復至 0%
+        const countdownProgress = document.getElementById('countdownProgress');
+        countdownProgress.style.width = '0%';
+        countdownProgress.className = 'progress-bar progress-success';
 
-
-        // 更新成果區（清除星星）
+        // 重設 UI（例如星星成果區）
         updateAchievementArea();
 
-
+        // 隱藏上方區塊
+        document.querySelector('.position-sticky').classList.add('d-none');
 
         console.log('數據已從 localStorage 清除');
         alert('所有數據已重置！');
+
+        // 最後確保畫面回到第一畫面
+        showScreen(1);
+
     } catch (error) {
         console.error('清除 localStorage 數據時出錯:', error);
     }
