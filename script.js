@@ -941,6 +941,10 @@ function showScreen(screenNumber) {
             countdownContainer.style.display = 'block';
             logo_S.classList.remove('d-none');
             logo_S.classList.add('d-block');
+            // 🔥 加入此行: 如果是在倒數畫面(2)，立即更新倒數顯示
+            if (screenNumber === 2) {
+                updateCountdown();
+            }
         }
     }
 }
