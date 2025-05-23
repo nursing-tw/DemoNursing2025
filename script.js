@@ -345,37 +345,35 @@ function saveToLocalStorage() {
 function loadFromLocalStorage() {
     try {
         const savedData = localStorage.getItem(STORAGE_KEY);
-        const stickyHeader = document.querySelector('.position-sticky'); // 新增此行
-
+        const stickyHeader = document.querySelector('.position-sticky');
+        
         if (savedData) {
             const data = JSON.parse(savedData);
 
-            // 還原成就與完成的項目
             achievedStars = data.achievedStars || 0;
             completedEduContents = data.completedEduContents || [];
             updateAchievementArea();
 
-            // 如果有儲存倒數資訊且儲存中有開始時間
-            if (data.countdown && data.countdown.active && data.countdown.startTime) {
-                totalSeconds = data.countdown.totalSeconds; // 例如 6*3600 或 4*3600
-                // 以存下的 startTime 重新計算預期結束時間
-                startTimeValue = new Date(data.countdown.startTime);
-                const intendedEndTime = new Date(startTimeValue.getTime() + totalSeconds * 1000);
-                endTimeValue = intendedEndTime;
-
-                // 重新計算剩餘秒數（根據目前時間與預期結束時間）
+            if (data.countdown && data.countdown.active && data.countdown.endTime) {
+                const endTime = new Date(data.countdown.endTime);
                 const now = new Date();
-                const diffSeconds = Math.floor((intendedEndTime - now) / 1000);
+
+                // 確保 totalSeconds 從儲存的資料復原
+                totalSeconds = data.countdown.totalSeconds;
+
+                const diffSeconds = Math.floor((endTime - now) / 1000);
+
                 if (diffSeconds > 0) {
                     remainingSeconds = diffSeconds;
-                    // 更新畫面上的開始與結束時間
+                    startTimeValue = new Date(endTime - totalSeconds * 1000);
+                    endTimeValue = endTime;
+
                     document.getElementById('startTime').textContent = formatTime(startTimeValue);
                     document.getElementById('endTime').textContent = formatTime(endTimeValue);
 
-                    // 啟動倒數計時
+                    // 確認畫面顯示與倒數更新
                     startCountdown();
 
-                    // 還原表單設定（如果之前是倒數畫面）
                     if (data.currentScreen === 2 && data.formSettings) {
                         document.getElementById('startTimeInput').value = data.formSettings.startTimeInput || '';
                         const unitSelect = document.getElementById('unit');
@@ -389,17 +387,17 @@ function loadFromLocalStorage() {
                         }
                         showScreen(2);
                         stickyHeader.classList.remove('d-none');
-                        return; // 還原到倒數畫面後結束
+                        return;
                     }
                 } else {
-                    // 倒數時間已過，直接顯示倒數結束畫面
+                    // 倒數已經結束
                     remainingSeconds = 0;
                     showScreen(6);
                     stickyHeader.classList.remove('d-none');
                 }
             }
 
-            // 還原表單設定（適用於非倒數狀態，例如畫面1）
+            // 還原其他狀態
             if (data.formSettings) {
                 document.getElementById('startTimeInput').value = data.formSettings.startTimeInput || '';
                 const unitSelect = document.getElementById('unit');
@@ -411,40 +409,34 @@ function loadFromLocalStorage() {
                 if (data.formSettings.selectedEduContent) {
                     eduSelect.value = data.formSettings.selectedEduContent;
                 }
-
             }
 
-            // 如果當前畫面是第三畫面(衛教內容頁面)且有保存的教育內容物件
             if (data.currentScreen === 3 && data.selectedEduContent) {
                 selectedEduContent = data.selectedEduContent;
                 displayEducationalContent(selectedEduContent);
                 stickyHeader.classList.remove('d-none');
             }
 
-            // 還原作答畫面：如果當前畫面是作答畫面（例如 screen4），且存有 selectedEduContentId
             if (data.currentScreen === 4 && data.selectedEduContentId) {
                 selectedEduContent = educationalContent.find(content => content.id === data.selectedEduContentId);
                 if (selectedEduContent) {
-                    // 顯示作答畫面，並重新產生測驗問題
                     displayEducationalContent(selectedEduContent);
                 }
                 stickyHeader.classList.remove('d-none');
             }
 
-            // 還原當前畫面（如果有保存）
             if (data.currentScreen) {
-                // 如果重整時的 currentScreen 為 5（結果頁），則返回第二畫面
                 if (data.currentScreen === 5) {
                     showScreen(2);
                 } else {
                     showScreen(data.currentScreen);
                 }
                 stickyHeader.classList.remove('d-none');
-            } else {
-                // 如果沒有任何資料，確保上方區塊隱藏
-                stickyHeader.classList.add('d-none'); // 新增此行
             }
+
             console.log('數據已從 localStorage 載入');
+        } else {
+            stickyHeader.classList.add('d-none');
         }
 
     } catch (error) {
